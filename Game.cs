@@ -18,14 +18,46 @@ namespace _15Puzzle
             while (HasWon() == false)
             {
                 board.Draw();
-                MoveNumber();
+                string selectedNumber = GetNumber();
+                (int, int) numberCoordinates = LocateCell(selectedNumber);
+                (int,int)[] ListOfPerpendiculars = FindPerpendiculars(numberCoordinates);
 
+                foreach (var PerpendicularCell in ListOfPerpendiculars)
+                {
+                    (int prow, int pcolumn) = PerpendicularCell;
+                    (int orow, int ocolumn) = numberCoordinates;
+                    if ((prow >= 0 && prow <= 3) && (pcolumn >= 0 && pcolumn <= 3))
+                    {
+                        if (board.MyBoard[prow, pcolumn].Content == " ")
+                        {
+                            board.MyBoard[prow, pcolumn].Content = board.MyBoard[orow, ocolumn].Content;
+                            board.MyBoard[orow, ocolumn].Content = " ";
+                            break;
+                        }
+                    }
+                }
                 Console.Clear();
+
             }
+            Console.WriteLine("You win");
 ;
         }
+        public (int,int)[] FindPerpendiculars((int,int) originalCoords)
+        {
+            (int row, int column) = originalCoords;
+            (int, int)[] ListOfPerpendicularCells = new (int,int)[4];
+            (int, int) UpperCell = (row - 1, column);
+            (int, int) LowerCell = (row + 1, column);
+            (int, int) LeftCell = (row, column - 1);
+            (int, int) RightCell = (row, column + 1);
+            ListOfPerpendicularCells[0] = UpperCell;
+            ListOfPerpendicularCells[1] = LowerCell;
+            ListOfPerpendicularCells[2] = LeftCell;
+            ListOfPerpendicularCells[3] = RightCell;
+            return ListOfPerpendicularCells;
 
-        public string MoveNumber()
+        }
+        public string GetNumber()
         {
             Console.WriteLine("What cell do you wish to move (1 - 15)?");
             string? input;
@@ -42,7 +74,7 @@ namespace _15Puzzle
             }
 
         }
-        public (int,int) LocateCell(Board board, string input )
+        public (int,int) LocateCell(string input )
         {
             (int, int) coordinates;
             for (int i = 0; i < 4; i++)
@@ -57,11 +89,7 @@ namespace _15Puzzle
                 }
 
             }
-            return (0, 0);
-        }
-        public void IsLegalMove()
-        {
-
+            return (0, 0);  
         }
         public bool HasWon()
         {
@@ -70,7 +98,11 @@ namespace _15Puzzle
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    if (Convert.ToInt32(board.MyBoard?[i, j].Content) != counter)
+                    if ((counter == 16) && (board.MyBoard?[3, 3].Content) == " ")
+                    {
+                        return true;
+                    }
+                    if ((board.MyBoard?[i, j].Content) != Convert.ToString(counter))
                     {
                         return false;
                     }

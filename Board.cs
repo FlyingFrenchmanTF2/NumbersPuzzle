@@ -13,7 +13,7 @@ namespace _15Puzzle
         public Cell[,]? MyBoard { get; set; }
 
         Random random = new Random();
-        List<string> listOfNumbers = new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "16", " " };
+        List<string> listOfNumbers = new List<string>() { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", " " };
 
         public void Generate()
         {
